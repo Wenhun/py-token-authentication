@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.viewsets import GenericViewSet
 
 from cinema.models import Genre, Actor, CinemaHall, Movie, MovieSession, Order
-from cinema.permisiions import IsAdminAllOrAuthenticatedOrReadOnly
+from cinema.permisiions import IsAdminOrIfAuthenticatedReadOnly
 
 from cinema.serializers import (
     GenreSerializer,
@@ -31,7 +31,7 @@ class GenreViewSet(mixins.CreateModelMixin,
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminAllOrAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class ActorViewSet(mixins.CreateModelMixin,
@@ -40,7 +40,7 @@ class ActorViewSet(mixins.CreateModelMixin,
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminAllOrAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class CinemaHallViewSet(mixins.CreateModelMixin,
@@ -49,7 +49,7 @@ class CinemaHallViewSet(mixins.CreateModelMixin,
     queryset = CinemaHall.objects.all()
     serializer_class = CinemaHallSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminAllOrAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class MovieViewSet(mixins.CreateModelMixin,
@@ -59,8 +59,7 @@ class MovieViewSet(mixins.CreateModelMixin,
     queryset = Movie.objects.prefetch_related("genres", "actors")
     serializer_class = MovieSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminAllOrAuthenticatedOrReadOnly,)
-
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     @staticmethod
     def _params_to_ints(qs):
@@ -110,7 +109,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
     )
     serializer_class = MovieSessionSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminAllOrAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_queryset(self):
         date = self.request.query_params.get("date")
